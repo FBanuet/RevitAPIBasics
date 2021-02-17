@@ -1,0 +1,66 @@
+/*
+ * Created by SharpDevelop.
+ * User: S-MK
+ * Date: 17/02/2021
+ * Time: 09:02 a. m.
+ * 
+ * To change this template use Tools | Options | Coding | Edit Standard Headers.
+ */
+using System;
+using Autodesk.Revit.UI;
+using Autodesk.Revit.DB;
+using Autodesk.Revit.UI.Selection;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace CLASE1
+{
+    [Autodesk.Revit.Attributes.Transaction(Autodesk.Revit.Attributes.TransactionMode.Manual)]
+    [Autodesk.Revit.DB.Macros.AddInId("E67550C4-4F4A-4E06-B1C7-7AB3788033F0")]
+	public partial class ThisApplication
+	{
+		private void Module_Startup(object sender, EventArgs e)
+		{
+
+		}
+
+		private void Module_Shutdown(object sender, EventArgs e)
+		{
+
+		}
+
+		#region Revit Macros generated code
+		private void InternalStartup()
+		{
+			this.Startup += new System.EventHandler(Module_Startup);
+			this.Shutdown += new System.EventHandler(Module_Shutdown);
+		}
+		#endregion
+		public void HELLOREVIT()
+		{
+			// OBTENER VARIABLES GLOBALES ESTÁTICAS (DOCUMENT , UIDOCUMENT)
+			
+			UIDocument uidoc = this.ActiveUIDocument;
+			Document doc = uidoc.Document;
+			
+			
+			Element elemento = doc.GetElement(uidoc.Selection.PickObject(ObjectType.Element,"SELECCIONE PORFAVOR UN ELEMENTO"));
+			
+			string nombre = "EL NOMBRE DEL ELEMENTO ES : " + elemento.Name;
+			string categoria = "LA CATEGORIA DEL ELEMENTO ES : " + elemento.Category.Name;
+			string id = "EL ID : " + elemento.Id.ToString();
+			
+			string info = categoria + Environment.NewLine + nombre + Environment.NewLine + id;
+		
+			TaskDialog tsk = new TaskDialog("HOLA REVIT!");
+			tsk.MainInstruction = info;
+			tsk.MainContent = "REVIT SAMPLE";
+			tsk.AllowCancellation = true;
+			tsk.CommonButtons = TaskDialogCommonButtons.Ok | TaskDialogCommonButtons.Cancel;
+			TaskDialogResult result = tsk.Show();
+			
+			
+			
+		}
+	}
+}
