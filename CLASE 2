@@ -1,0 +1,74 @@
+		public void HELLOREVIT()
+		{
+			// OBTENER VARIABLES GLOBALES ESTÁTICAS (DOCUMENT , UIDOCUMENT)
+			
+			UIDocument uidoc = this.ActiveUIDocument;
+			Document doc = uidoc.Document;
+			Selection sel = uidoc.Selection;
+			
+			// REALIZAR LA INDICACIÓN O INTERACCIÓN CON EL USUARIO PARA SELECCIONAR UN ELEMENTO DEL DOCUMENTO
+			Element elemento = doc.GetElement(sel.PickObject(ObjectType.Element));
+			
+			//INFORMACIÓN EXTRAIDA MOSTRADA EN UN STRING
+			string nombre = "EL NOMBRE DEL ELEMENTO ES : " + elemento.Name;
+			string categoria = "LA CATEGORIA DEL ELEMENTO ES : " + elemento.Category.Name;
+			string id = "EL ID : " + elemento.Id.ToString();
+			
+			string info = categoria + Environment.NewLine + nombre + Environment.NewLine + id;
+		
+			
+			// CREACIÓN DE UN OBJETO TIPO TASKDIALOG 
+			TaskDialog tsk = new TaskDialog("HOLA REVIT!");
+			tsk.MainInstruction = info;
+			tsk.MainContent = "REVIT SAMPLE";
+			tsk.AllowCancellation = true;
+			tsk.CommonButtons = TaskDialogCommonButtons.Ok | TaskDialogCommonButtons.Cancel;
+			TaskDialogResult result = tsk.Show();
+			
+			//CONTROL DE FLUJO ATRAVES DEL RESULTADO DE LA DECISIÓN DEL USUARIO
+			
+			if(result == TaskDialogResult.Ok)
+			{
+				TaskDialog.Show("ACCIÓN COMPLETADA!","USTED DECIDIO CONTINUAR!");
+			}
+			else
+			{
+				TaskDialog.Show("WARINING!","USTED DECIDIO CANCELAR!");
+				
+		
+			}
+			
+			
+			
+		}
+		
+		public void SeleccionMultiple()
+		{
+			// variables globales
+			UIDocument uidoc = this.ActiveUIDocument;
+			Document doc = uidoc.Document;
+			
+//			instanciando o llamando ala clase Selection
+			Selection sel = uidoc.Selection;
+			
+			IList<Element> elementosseleccionados = sel.PickElementsByRectangle("SELECCIONAR LOS ELEMENTOS ATRAVES DE UNA VENTANA!");
+			
+			ICollection<ElementId>eleids = new List<ElementId>();
+			string info = "";
+			
+			foreach(Element ele in elementosseleccionados)
+			{
+				if(ele is Floor){
+					eleids.Add(ele.Id);
+					info += ele.Name + Environment.NewLine;
+				}
+				
+			}
+			
+			TaskDialog.Show("INFO",info);
+			sel.SetElementIds(eleids);
+			
+			
+			
+		}
+	}
